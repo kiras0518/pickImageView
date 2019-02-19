@@ -14,9 +14,15 @@ class ViewController: UIViewController, UIImagePickerControllerDelegate, UINavig
     @IBOutlet weak var myScrollView: UIScrollView!
     
     var imageView = UIImageView()
+    
     @IBAction func pickView(_ sender: UIButton) {
         
-      
+        let image = UIImagePickerController()
+        image.delegate = self
+        image.sourceType = UIImagePickerController.SourceType.photoLibrary
+        
+        self.present(image, animated: true)
+
         
     }
  
@@ -85,21 +91,32 @@ class ViewController: UIViewController, UIImagePickerControllerDelegate, UINavig
         myScrollView.addSubview(imageView)
 
         //測試點擊讀取相簿
-        let tapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(loadImage))
-        tapGestureRecognizer.numberOfTapsRequired = 2
-        imageView.addGestureRecognizer(tapGestureRecognizer)
-        
+        //let tapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(loadImage))
+//        tapGestureRecognizer.numberOfTapsRequired = 2
+//        imageView.addGestureRecognizer(tapGestureRecognizer)
+        //
+        setZoomScale()
     }
     
-    @objc func loadImage(recognizer: UITapGestureRecognizer) {
+    func setZoomScale() {
+        let imageViewSize = imageView.bounds.size
+        let scrollViewSize = myScrollView.bounds.size
+        let widthScale = scrollViewSize.width / imageViewSize.width
+        let heightScale = scrollViewSize.height / imageViewSize.height
         
-        let image = UIImagePickerController()
-        image.delegate = self
-        image.sourceType = UIImagePickerController.SourceType.photoLibrary
-
-        self.present(image, animated: true)
-
+        myScrollView.minimumZoomScale = min(widthScale, heightScale)
+        myScrollView.zoomScale = 1.0
     }
+    
+//    @objc func loadImage(recognizer: UITapGestureRecognizer) {
+//
+//        let image = UIImagePickerController()
+//        image.delegate = self
+//        image.sourceType = UIImagePickerController.SourceType.photoLibrary
+//
+//        self.present(image, animated: true)
+//
+//    }
 
 }
 
